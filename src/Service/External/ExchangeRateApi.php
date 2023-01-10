@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace RefactoringTask\Service\External;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
+use RefactoringTask\Exception\ExchangeRateApiException;
+
+class ExchangeRateApi
+{
+    /**
+     * @var Client
+     */
+    protected $httpClient;
+
+    public function __construct()
+    {
+        $this->httpClient = new Client([
+            'base_uri' => 'https://api.exchangeratesapi.io',
+        ]);
+    }
+
+    public function request(string $method, string $url, ?array $params = []): array
+    {
+        try {
+            $response = $this->httpClient->request($method, $url, $params);
+        } catch (GuzzleException $exception) {
+            throw new ExchangeRateApiException('Could not get connection to api.', 0, $exception);
+        }
+
+        return json_decode($response->getBody()->getContents(), true);
+    }
+}
