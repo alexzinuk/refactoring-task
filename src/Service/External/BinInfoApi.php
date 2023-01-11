@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace RefactoringTask\Service\External;
 
@@ -27,7 +27,7 @@ class BinInfoApi
         try {
             $response = $this->httpClient->request($method, $url, $params);
         } catch (GuzzleException $exception) {
-            throw new BinInfoApiException('Could not get connection to bin info api.', null, $exception);
+            throw new BinInfoApiException('Could not get connection to bin info api.', 0, $exception);
         }
 
         return json_decode($response->getBody()->getContents(), true);
